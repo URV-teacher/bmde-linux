@@ -9,7 +9,8 @@ and Assembly for Windows systems in a repeatable and didactic manner.
 
 # Components
 ## Libraries provided by devkitPro 
-From the original `BMDE` environment. Originally obtained from devkitPro updater v1.6.0 for Windows.
+From the original BMDE environment. Originally obtained from devkitPro updater v1.6.0 for Windows (AFAIK lost media 
+currently).
 
 | Library     | Version  |
 |-------------|----------|
@@ -31,21 +32,21 @@ From the original `BMDE` environment. Originally obtained from devkitPro updater
 Version 46, downloaded from [here](https://wii.leseratte10.de/devkitPro/devkitARM/r46%20%282017%29/).
 
 # Removed components from original BMDE
-| Name         | Version         | Notes                                                               |
-|--------------|-----------------|---------------------------------------------------------------------|
-| msys         | 1.0.17-1        | (Not needed since we already have a working Linux environment)      |
-| 3dsexamples  | 20170226        | (Not needed for compilation, can be included afterwards)            |
-| ndsexamples  | 20170124        | (Not needed for compilation, can be included afterwards)            |
-| gbaexamples  | 20170228        | (Not needed for compilation, can be included afterwards)            |
-| gp32examples | 20051021        | (Not needed for compilation, can be included afterwards)            |
-| insight      | 7.3.50.20110803 | (Not needed, we do not want to debug the software, only compile it) |
+| Name         | Version         | Notes                                                             |
+|--------------|-----------------|-------------------------------------------------------------------|
+| msys         | 1.0.17-1        | Not needed since we already have a working Linux environment      |
+| 3dsexamples  | 20170226        | Not needed for compilation, can be included afterwards            |
+| ndsexamples  | 20170124        | Not needed for compilation, can be included afterwards            |
+| gbaexamples  | 20170228        | Not needed for compilation, can be included afterwards            |
+| gp32examples | 20051021        | Not needed for compilation, can be included afterwards            |
+| insight      | 7.3.50.20110803 | Not needed, we do not want to debug the software, only compile it |
 
 
 # Usage
 
 ## Use environment for automatic compilation through `docker compose`
 Clone the repository and enter inside it. Instead, you can also create the `input` and `output` folder for mount points
-for `docker compose` and download the `compose.yml` file into an arbitrary folder:
+for `docker compose` and download the `compose.yml` file into the same folder as the mount points:
 ```shell
 git clone https://github.com/URV-teacher/bmde-linux
 cd bmde-linux
@@ -57,7 +58,7 @@ cd input
 git clone https://github.com/URV-teacher/hello-world-nds
 ```
 
-... to clone the `hello-world-nds` project. 
+... to clone the [`hello-world-nds`](https://github.com/URV-teacher/hello-world-nds) project. 
 
 Afterwards, `cd` back into the `bmde-linux` project and run `docker compose up`:
 ```shell
@@ -96,7 +97,7 @@ interactive mode.
 To put data inside it, we will probably need to install some commands to connect to the Internet. For example, to
 install git:
 ```shell
-sudo apt-get install -y git
+apt-get install -y git
 ```
 
 Afterwards, we can clone a repo, for example, we could do:
@@ -165,3 +166,5 @@ flatpak run org.desmume.DeSmuME
 
 This will run DeSmuME in a containerized manner, using another container technology for graphical applications called 
 `flatpak`.
+
+# Acknowledgements
