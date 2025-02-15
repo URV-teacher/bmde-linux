@@ -1,35 +1,118 @@
-
-Partial port of the `BMDE` (bare metal development environment) to Linux (and subsequently to Docker) from the URV 
+Partial port of the BMDE (bare metal development environment) to Linux (and subsequently to Docker) from the URV 
 subject 
 Computer Fundamentals, 
 Computers and Operating System Structure, to achieve compilation of the C and assembly projects of the subjects into
-runnable .nds roms.
+runnable `.nds` roms.
+
+The original BMDE is an environment to compile, run, debug and develop NDS (Nintendo DS) software projects written in C 
+and Assembly for Windows systems in a repeatable and didactic manner.
 
 # Components
 ## Libraries provided by devkitPro 
-From the original `BMDE` environment. Originally obtained from devkitPro updater v1.6.0 for Windows. 
-* libgba Version=0.5.0
-* libgbafat Version=1.1.0
-* maxmodgba Version=1.0.10
-* libnds Version=1.6.2
-* libndsfat Version=1.1.0
-* defaultarm7 Version=0.7.1
-* filesystem Version=0.9.13-1
-* dswifi Version=0.4.0
-* libmirko Version=0.9.7
-* maxmodds Version=1.0.10
-* libctru Version=1.2.1
-* citro3d Version=1.2.0
+From the original `BMDE` environment. Originally obtained from devkitPro updater v1.6.0 for Windows.
+
+| Library     | Version  |
+|-------------|----------|
+| libgba      | 0.5.0    |
+| libgbafat   | 1.1.0    |
+| maxmodgba   | 1.0.10   |
+| libnds      | 1.6.2    |
+| libndsfat   | 1.1.0    |
+| defaultarm7 | 0.7.1    |
+| filesystem  | 0.9.13-1 |
+| dswifi      | 0.4.0    |
+| libmirko    | 0.9.7    |
+| maxmodds    | 1.0.10   |
+| libctru     | 1.2.1    |
+| citro3d     | 1.2.0    |
+
 
 ## devkitARM
 Version 46, downloaded from [here](https://wii.leseratte10.de/devkitPro/devkitARM/r46%20%282017%29/).
 
 # Removed components from original BMDE
-* (Not needed since we already have a working Linux environment) msys Version=1.0.17-1 
-* (Not needed for compilation, can be included afterwards) 3dsexamples Version=20170226,ndsexamples Version=20170124, gbaexamples Version=20170228, gp32examples Version=20051021
-* (Not needed, we do not want to debug the software, only compile it) insight Version=7.3.50.20110803
+| Name         | Version         | Notes                                                               |
+|--------------|-----------------|---------------------------------------------------------------------|
+| msys         | 1.0.17-1        | (Not needed since we already have a working Linux environment)      |
+| 3dsexamples  | 20170226        | (Not needed for compilation, can be included afterwards)            |
+| ndsexamples  | 20170124        | (Not needed for compilation, can be included afterwards)            |
+| gbaexamples  | 20170228        | (Not needed for compilation, can be included afterwards)            |
+| gp32examples | 20051021        | (Not needed for compilation, can be included afterwards)            |
+| insight      | 7.3.50.20110803 | (Not needed, we do not want to debug the software, only compile it) |
 
-# Install it directly into your linux system for manual usage
+
+# Usage
+
+## Use environment for automatic compilation through `docker compose`
+Clone the repository and enter inside it. Instead, you can also create the `input` and `output` folder for mount points
+for `docker compose` and download the `compose.yml` file into an arbitrary folder:
+```shell
+git clone https://github.com/URV-teacher/bmde-linux
+cd bmde-linux
+```
+
+Add all the projects that you want to compile inside the `input/` directory. For example, you could do...
+```shell
+cd input
+git clone https://github.com/URV-teacher/hello-world-nds
+```
+
+... to clone the `hello-world-nds` project. 
+
+Afterwards, `cd` back into the `bmde-linux` project and run `docker compose up`:
+```shell
+cd bmde-linux
+docker compose up 
+```
+
+After the execution you will see the resulting `.nds` files from the projects in the `input` folder inside the `output` 
+folder. You will also see the resulting binaries and the build artifacts inside each corresponding project, inside 
+the `input` folder, if you want to check out anything. 
+
+
+## Customizing / extending the BMDE environment for Linux
+Inside your project folder, create a `Dockerfile` with a `FROM` directive that points to the Docker container of BMDE:
+```dockerfile
+# Extend bmde container
+FROM aleixmt/bmde-linux:latest
+# Copy directory of the project into /workspace dir for automatic compilation 
+COPY . /workspace/
+# Add any more instruction for the building of your image
+```
+
+Also copy the `compose.yml` file from this repo to yours as starters. Then, you will be able to compile your software 
+from scratch with `docker compose up --build --no-cache`, you will find the resulting binaries in the `output` folder.
+
+
+## Use environment for manual usage inside container through `docker run`
+With docker installed, use:
+```shell
+docker run -it aleixmt/bmde-linux:latest
+```
+
+Since we are running the image directly without loading any data inside it, we will enter inside the container in
+interactive mode.
+
+To put data inside it, we will probably need to install some commands to connect to the Internet. For example, to
+install git:
+```shell
+sudo apt-get install -y git
+```
+
+Afterwards, we can clone a repo, for example, we could do:
+```shell
+git clone https://github.com/URV-teacher/hello-world-nds
+```
+
+And then `cd` inside the repository and compile the software with `make`.
+
+To move the results of the compilation (usually `.nds` files),
+you can communicate a folder from inside the container with a folder of your host by adding parameters into the `docker
+run` command to mount a volume. I will not explain it because it is better to use the `compose.yml` through `docker
+compose`, which automatically mounts volumes.
+
+
+## Install it directly into your Linux system for manual usage
 This is not the preferred way to run this software, but is possible to do it, though I am (currently) not providing 
 scripts to automatically do so. I will provide some instructions if someone wants to try it out, since surprisingly with 
 the right binaries the environment works with minor changes.
@@ -69,6 +152,16 @@ I could not find a way to configure `ndstool` to use the `default.elf` file from
 9. Finally, you can open a terminal in the project that you want to compile and execute `make` to compile the project. 
 The projects can be located in any path of your liking. 
 
+Installation steps may change, specially the ones regarding the specification of paths of libraries in the base rules of
+the devkitARM toolchain. Luckily, when building the container, we do not needed to specify the path of any libraries.
+They were found automatically. 
 
-# Use environment for manual usage
+## Run `.nds` files into DeSmuME
+I recommend using `flatpak` to run DeSmuME:
+```shell
+flatpak install flathub org.desmume.DeSmuME
+flatpak run org.desmume.DeSmuME
+```
 
+This will run DeSmuME in a containerized manner, using another container technology for graphical applications called 
+`flatpak`.
