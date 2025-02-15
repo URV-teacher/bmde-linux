@@ -1,0 +1,6 @@
+services:
+  bmde-linux:
+    build: .
+    volumes:
+      - ./input:/input
+      - ./output:/output
