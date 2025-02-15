@@ -6,6 +6,9 @@ ENV DEVKITPRO=/bmde/devkitPro
 ENV DEVKITARM=$DEVKITPRO/devkitARM
 ENV PATH=$DEVKITARM/bin:$PATH
 
+# Compatibility with project that need DESMUME env variable defined, even if it is not needed for compilation
+ENV DESMUME="/"
+
 # Install required dependencies
 RUN apt-get update && apt-get install -y \
     make \

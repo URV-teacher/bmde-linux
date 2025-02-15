@@ -21,5 +21,6 @@ done
 if [ $DIR_PRESENT == 1 ]; then
     echo "All .nds files copied to /output."
 else
-    echo "No directories present in /input to compile."
+    echo "No directories present in /input to compile. Entering interactive mode"
+    /bin/bash
 fi
