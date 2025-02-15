@@ -21,7 +21,7 @@ RUN wget https://wii.leseratte10.de/devkitPro/devkitARM/r46%20%282017%29/devkitA
     && rm devkitARM_r46-x86_64-linux.tar.bz2
 
 # Copy and extract libnds.tar.bz2
-COPY data/libnds.tar.bz2 /bmde/devkitPro/
+COPY ./data/libnds.tar.bz2 /bmde/devkitPro/
 RUN tar -xvjf /bmde/devkitPro/libnds.tar.bz2 -C /bmde/devkitPro/ \
     && rm /bmde/devkitPro/libnds.tar.bz2
 
