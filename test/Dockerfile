@@ -2,13 +2,19 @@
 FROM aleixmt/bmde-linux:latest
 
 # Copy entrypoint ans test materials into image container
-COPY ./entrypoint.sh  /app/
+COPY entrypoint.sh  /app/
+RUN chmod +x /app/entrypoint.sh
 COPY ./test.zip /app/
 
-RUN apt-get install update && \
-    apt-get install -y unzip
+# Set working directory into /app dir
+WORKDIR /app
 
+# Install unzip dependency
+RUN apt-get update && \
+    apt-get install -y unzip coreutils
+
+# Unzip test files
 RUN unzip test.zip
 
-# Set the entrypoint
-ENTRYPOINT ["/entrypoint.sh"]
+# Run test
+ENTRYPOINT ["/app/test.sh"]
