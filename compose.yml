@@ -2,5 +2,4 @@ services:
   bmde-linux:
     build: .
     volumes:
-      - ./input:/input
-      - ./output:/output
+      - ./:/input/my_project
