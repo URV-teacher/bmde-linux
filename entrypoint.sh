@@ -13,7 +13,7 @@ process_dir()
   # Iterate over all directories inside $1
   for dir in $1/*/; do
       # Check if it's a directory
-      if [ -d "$dir" ]; then
+      if [ -d "$dir" ] && [ -f "${dir}/Makefile" ]; then
           echo "Processing directory: $dir"
           {
             cd "$dir"
