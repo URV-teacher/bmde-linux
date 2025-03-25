@@ -9,7 +9,7 @@ copy_binaries()
 
 process_dir()
 {
-  DIR_MULTIPLE=0
+  local DIR_MULTIPLE=0
   # Iterate over all directories inside $1
   for dir in $1/*/; do
       # Check if it's a directory
@@ -20,7 +20,7 @@ process_dir()
             cd "$dir"
             make clean
             make
-            COMPILED=1
+            [ $? -eq 0 ] && COMPILED=1
           }
           # Find and copy all binary files from this directory to /output
           copy_binaries "${dir}"
