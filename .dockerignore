@@ -31,6 +31,5 @@ LICENSE
 README.md
 
 # Ignore other project folders
-data/
 examples/
 test/
