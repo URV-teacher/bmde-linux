@@ -19,8 +19,8 @@ process_dir()
             cd "$dir"
             make clean
             make
-            [ $? -eq 0 ] && COMPILED=1 && DIR_MULTIPLE=1
           }
+          [ $? -eq 0 ] && COMPILED=1 && DIR_MULTIPLE=1
           # Find and copy all binary files from this directory to /output
           copy_binaries "${dir}"
       fi
