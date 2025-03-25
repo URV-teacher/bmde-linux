@@ -26,7 +26,8 @@ process_dir()
       fi
   done
 
-  if [ "${DIR_MULTIPLE}" -eq 0 ]; then
+  echo dir is ${DIR_MULTIPLE}
+  if [ ${DIR_MULTIPLE} -eq 0 ]; then
     {
       cd "$1"
       make clean
