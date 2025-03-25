@@ -14,13 +14,12 @@ process_dir()
   for dir in $1/*/; do
       # Check if it's a directory
       if [ -d "$dir" ]; then
-          DIR_MULTIPLE=1
           echo "Processing directory: $dir"
           {
             cd "$dir"
             make clean
             make
-            [ $? -eq 0 ] && COMPILED=1
+            [ $? -eq 0 ] && COMPILED=1 && DIR_MULTIPLE=1
           }
           # Find and copy all binary files from this directory to /output
           copy_binaries "${dir}"
@@ -32,6 +31,7 @@ process_dir()
       cd "$1"
       make clean
       make
+      [ $? -eq 0 ] && COMPILED=1
     }
     copy_binaries "$1"
   fi
@@ -43,7 +43,7 @@ COMPILED=0
 process_dir /input
 process_dir /workspace
 
-if [ ${COMPILED} == 1 ]; then
+if [ ${COMPILED} -eq 1 ]; then
     echo "All binary files (.nds, .elf and .dldi) copied to /output."
 else
     echo "No directories or content present in /input or /workspace to compile. Entering interactive mode"
