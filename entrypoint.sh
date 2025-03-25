@@ -26,7 +26,6 @@ process_dir()
       fi
   done
 
-  echo dir is ${DIR_MULTIPLE}
   if [ ${DIR_MULTIPLE} -eq 0 ]; then
     {
       cd "$1"
@@ -42,11 +41,10 @@ process_dir()
 COMPILED=0
 
 process_dir /input
-process_dir /workspace
 
 if [ ${COMPILED} -eq 1 ]; then
     echo "All binary files (.nds, .elf and .dldi) copied to /output."
 else
-    echo "No directories or content present in /input or /workspace to compile. Entering interactive mode"
+    echo "No directories or content present in /input to compile. Entering interactive mode"
     /bin/bash
 fi
