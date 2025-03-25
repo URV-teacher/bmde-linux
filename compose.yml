@@ -1,5 +1,6 @@
 services:
   bmde-linux:
+    image: aleixmt/bmde-linux:latest
     build: .
     volumes:
       - ./:/input/

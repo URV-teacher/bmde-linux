@@ -38,8 +38,6 @@ process_dir()
 }
 
 
-set -e
-
 COMPILED=0
 
 process_dir /input
