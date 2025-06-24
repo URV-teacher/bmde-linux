@@ -29,7 +29,10 @@ entrypoint.sh~
 Dockerfile
 LICENSE
 README.md
+.gitignore
 
 # Ignore other project folders
 examples/
 test/
+.github/
+.idea/

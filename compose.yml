@@ -1,6 +1,11 @@
 services:
   bmde-linux:
     image: aleixmt/bmde-linux:latest
-    build: .
+    container_name: bmde-linux
+    build:
+      context: .
+      dockerfile: Dockerfile
     volumes:
-      - ./:/input/
+      - ./:/input
+    entrypoint: sh -c "cd /input && make clean && make"
+

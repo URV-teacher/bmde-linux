@@ -1,7 +1,12 @@
 services:
   bmde-linux:
     image: aleixmt/bmde-linux:latest
-    #build: .
+    container_name: bmde-linux
+    # Uncomment the following to build from a local Dockerfile instead of pulling from Docker Hub. You may use this
+    # to extend the base bmde Docker image with your own custom infrastructure.
+    # build:
+    #   context: .
+    #   dockerfile: Dockerfile
     volumes:
-     - ./:/input/  # Makefile in the same directory as compose, binary the same way as root folder of this project
-     #- ../:/input/
+     - ./:/input/  # Makefile has to be in the same directory as compose.yml
+    entrypoint: sh -c "cd /input && make clean && make"  # Uncomment to override the Docker image entrypoint

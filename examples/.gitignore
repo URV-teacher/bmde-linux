@@ -1,4 +1,4 @@
 *
+!.gitignore
 !compose.yml
 !Dockerfile
-!.gitignore

@@ -17,4 +17,4 @@ RUN apt-get update && \
 RUN unzip test.zip
 
 # Run test
-ENTRYPOINT ["/app/test.sh"]
+ENTRYPOINT ["/app/entrypoint.sh"]
