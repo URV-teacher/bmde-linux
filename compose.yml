@@ -8,4 +8,6 @@ services:
     volumes:
       - ./:/input
     entrypoint: sh -c "cd /input && make clean && make"
+    user: 1000:1000
+
 

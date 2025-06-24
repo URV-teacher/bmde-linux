@@ -87,8 +87,8 @@ Usually Makefiles are instructed with creating the final binary files with the s
 are in. Since in the `compose.yml` we provide the project is mounted into `/input` the final binaries will have that
 name (`input.nds`, `input.elf` or `input.dldi`).
 
-If you want binaries to have the name of the folder they are in, you must modify the volume mounting point and the
-compilation entrypoint.
+If you want binaries to have the name of the folder they are in, you usually must modify the volume mounting point and 
+the compilation entrypoint by adding the name of your project folder.
 ```dockerfile
     volumes:
       - ./:/input/project-name
@@ -144,6 +144,23 @@ You can do this to change the commands used to compile the software by using you
 Modifications done by you entrypoint to the container are not conserved into the image, so the entrypoint can include 
 confidential information and upload the image afterwards safely. 
 
+## Run container as your user to avoid conflicting permissions
+The container is run as root, which means that the files created by it will be owned by this user. This means that we 
+need to change the permissions of the files if we want to delete or move them. 
+
+To avoid having to do this change of permissions every time we do the compilation, we can add an `user` directive in our 
+`compose.yml` file to make the container run as ourselves, and we can control the files directly.
+
+To implement this behaviour, we will run the commands `id -u` and `id -g` to find out our UID and GID values. 
+Usually, these values are 1000 and 1000.
+These values will be passed to the container using the user directive like this:
+```dockerfile
+    user: 1000:1000
+```
+
+After this, just run `docker compose up` and the files created by the container will be owned by you. 
+
+
 ## Use environment for manual usage inside container through `docker run`
 With docker installed, use:
 ```shell
@@ -187,17 +204,17 @@ the right binaries the environment works with minor changes.
 /ANY_FOLDER/devkitPro/libnds
 ```
 Also, create the environment variables `DEVKITPRO=/ANY_FOLDER/devkitPro`, `DEVKITARM=$DEVKITPRO/devkitARM` and
-`DESMUME="/"`
-(for compatibility purposes). Also add the path `$DEVKITARM/bin` into the beginning of the `PATH` environment variable.
-You
-can do it with:
+`DESMUME="/"`. This last variable has a "dummy" definition because it is needed for compatibility purposes. Also add the
+path `$DEVKITARM/bin` into the beginning of the `PATH` environment variable.
+
+You can do it with:
 ```shell
 PATH=$DEVKITARM/bin:$PATH
 ```
 4. Move the decompressed files of devkitARM into `/ANY_FOLDER/devkitPro/devkitARM` and the decompressed files of
    `libnds.tar.bz2` into
    `/ANY_FOLDER/devkitPro/libnds`
-5. Install `make` using your package manager and use `make` to try to compile your software.
+5. Install `make` using your package manager `sudo apt install -y make` and use `make` to try to compile your software.
 6. If the `#include <nds.h>` directive does not found the corresponding file, add the `include` folder from the `libnds`
    into the `base_rules` of devkitPro: `$(CC) -I/ANY_FOLDER/devkitPro/libnds/include/ -c myfile.c`
 7. Afterwards, if it still does not work, you will need to add the binaries of the libnds library manually into
@@ -207,7 +224,8 @@ PATH=$DEVKITARM/bin:$PATH
 ```
 You need to add `-L/path/to/libnds` to the corresponding `Makefile` rule (the one that is failing).
 8. Finally, the `ndstool` will be complaining about not finding the `default.elf`, which to solve I move to the
-   location were `ndstool` was expecting the file. I could not change the "rule" files like I did in previous steps because
+   location were `ndstool` was expecting the file. I could not change the "rule" files like I did in previous steps 
+   because
    I could not find a way to configure `ndstool` to use the `default.elf` file from another location.
 9. Finally, you can open a terminal in the project that you want to compile and execute `make` to compile the project.
    The projects can be located in any path of your liking.
@@ -217,7 +235,7 @@ the devkitARM toolchain. Luckily, when building the container, we do not needed 
 They were found automatically.
 
 ## Run `.nds` files into DeSmuME
-I recommend using `flatpak` to run DeSmuME:
+At this moment, I recommend using `flatpak` to run DeSmuME:
 ```shell
 flatpak install flathub org.desmume.DeSmuME
 flatpak run org.desmume.DeSmuME
