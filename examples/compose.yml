@@ -9,4 +9,6 @@ services:
     #   dockerfile: Dockerfile
     volumes:
      - ./:/input/  # Makefile has to be in the same directory as compose.yml
+    # Add " && dlditool /bmde/dlditool/mpcf.dldi /input/input.nds" to entrypoint to patch the rom after compiling it
     entrypoint: sh -c "cd /input && make clean && make"  # Uncomment to override the Docker image entrypoint
+
