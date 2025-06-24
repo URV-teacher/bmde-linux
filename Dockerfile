@@ -6,7 +6,7 @@ FROM debian:latest
 ENV DEVKITPRO=/bmde/devkitPro \
     DEVKITARM=/bmde/devkitPro/devkitARM \
     DLDITOOL=/bmde/dlditool \
-    PATH=$DEVKITARM/bin:$DLDITOOL/bin:$PATH \
+    PATH=/bmde/devkitPro/devkitARM/bin:/bmde/dlditool/bin:$PATH \
     DESMUME="/"
 
 # Install only required tools in one layer and clean up to reduce image size
@@ -19,9 +19,9 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     bzip2 \
     unzip \
  && mkdir -p $DEVKITPRO $DEVKITARM \
- && wget --no-check-certificate "https://wii.leseratte10.de/devkitPro/devkitARM/r46%20%282017%29/devkitARM_r46-x86_64-linux.tar.bz2" \
- && tar -xf devkitARM_r46-x86_64-linux.tar.bz2 -C /bmde/devkitPro/ \
- && rm devkitARM_r46-x86_64-linux.tar.bz2
+ && wget --no-check-certificate "https://wii.leseratte10.de/devkitPro/devkitARM/r46%20%282017%29/devkitARM_r46-x86_64-linux.tar.bz2" -O /tmp/devkitARM.tar.bz2 \
+ && tar -xf /tmp/devkitARM.tar.bz2 -C /bmde/devkitPro/ \
+ && rm /tmp/devkitARM.tar.bz2
 
 # Copy and extract libnds.tar.bz2 for the subject. TODO: Obtain libnds from a reproducible source
 COPY ./data/libnds.tar.bz2 /bmde/devkitPro/
