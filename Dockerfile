@@ -47,7 +47,7 @@ RUN apt-get purge -y \
 # Create directory for input volume
 RUN mkdir -p /input
 
-# Uncomment to use custom entrypoint
-#COPY entrypoint.sh /entrypoint.sh
-#RUN chmod +x /entrypoint.sh
-#ENTRYPOINT ["/entrypoint.sh"]
+# Change to use custom entrypoint
+COPY entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
+ENTRYPOINT ["/entrypoint.sh"]

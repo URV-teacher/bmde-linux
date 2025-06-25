@@ -60,7 +60,7 @@ Inside the root of your homebrew project (in the same folder as a `Makefile`) do
 [this `docker-compose.yml`](https://raw.githubusercontent.com/URV-teacher/bmde-linux/master/examples/compose.yml).
 
 ###### Run container
-Afterwards, use `docker compose up` to run the container, which will compile the software. 
+Afterward, use `docker compose up` to run the container, which will compile the software. 
 You can use Docker Desktop to run the `compose.yml`.
 
 ###### Clean containers and volumes
@@ -132,17 +132,18 @@ directive from the `compose.yml` file:
 
 You also need to copy `entrypoint.sh` to the same folder as your `Dockerfile` and `compose.yml`.
 
-Finally, you need to have these in your `Dockerfile` to copy the entrypoint inside the container and set it to be used:
+Finally, you need to have these in the end of your `Dockerfile` to copy the entrypoint inside the container and set it 
+to be used:
 ```dockerfile
 # Uncomment to use custom entrypoint
-#COPY entrypoint.sh /entrypoint.sh
-#RUN chmod +x /entrypoint.sh
-#ENTRYPOINT ["/entrypoint.sh"]
+COPY entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
+ENTRYPOINT ["/entrypoint.sh"]
 ```
 
 You can do this to change the commands used to compile the software by using your `entrypoint.sh` to do so. 
 Modifications done by you entrypoint to the container are not conserved into the image, so the entrypoint can include 
-confidential information and upload the image afterwards safely. 
+confidential information and upload the image afterward safely. 
 
 ## Run container as your user to avoid conflicting permissions
 The container is run as root, which means that the files created by it will be owned by this user. This means that we 
